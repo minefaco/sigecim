@@ -1,0 +1,36 @@
+<% layout('layouts/main') %>
+
+<div class="container py-5">
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
+        <div class="container-fluid py-2">
+            <h1 class="display-5 fw-bold">Bienvenido, <%= nombre %></h1>
+            <p class="fs-4 text-muted">Rol: <span class="badge bg-dark"><%= rol %></span></p>
+            <hr class="my-4">
+
+            <% if (rol === 'Admin') { %>
+                <div class="row g-4 mt-2">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-primary shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Gestión de Personal</h5>
+                                <p class="card-text text-muted">Visualiza, edita o elimina a los usuarios registrados.</p>
+                                <a href="/usuarios" class="btn btn-primary btn-lg w-100">Ver Usuarios</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-success shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Nuevo Registro</h5>
+                                <p class="card-text text-muted">Registra nuevos usuarios.</p>
+                                <a href="/usuarios/nuevo" class="btn btn-success btn-lg w-100">Crear Usuario</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">Bienvenido al sistema médico SIGECIM.</div>
+            <% } %>
+        </div>
+    </div>
+</div>

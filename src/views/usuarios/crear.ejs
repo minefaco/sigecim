@@ -1,0 +1,58 @@
+<% layout('layouts/main') %>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 text-center">Registrar Nuevo Personal en SIGECIM</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="/usuarios/nuevo" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Ej: Juan" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Apellido</label>
+                            <input type="text" name="apellido" class="form-control" placeholder="Ej: Pérez" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Documento de Identidad</label>
+                        <input type="text" name="documento" class="form-control" placeholder="C.C. / T.I." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña Temporal</label>
+                        <input type="password" name="password" class="form-control" placeholder="Asigne una clave" required>
+                        <div class="form-text">El usuario podrá cambiarla después.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Rol en el Sistema</label>
+                        <select name="rol" class="form-select">
+                            <option value="Paciente">Paciente</option>
+                            <option value="Medico">Médico</option>
+                            <option value="Recepcionista">Recepcionista</option>
+                            <option value="Admin">Administrador</option>
+                        </select>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Guardar Usuario</button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
