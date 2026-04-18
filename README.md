@@ -1,6 +1,6 @@
 
 
-### Diagrama de Flujo del Proceso
+### 📊 Diagrama de Flujo del Proceso
 
 ```mermaid
 graph TD
@@ -17,12 +17,11 @@ graph TD
     Alternativas --> Consulta
     
     Consulta -- Sí --> Seleccion[Selección de especialista y horario]:::proceso
-    Seleccion --> Persistencia[Registro en Base de Datos SQL]:::proceso
-    Persistencia --> Notificacion[Generación de comprobante/notificación]:::proceso
+    Seleccion --> Persistencia[Registro en MongoDB]:::proceso
+    Persistencia --> Notificacion[Generación de comprobante]:::proceso
     
     Notificacion --> Fin((Fin: Cita Programada)):::inicio_fin
 
-    %% Notas de Contexto (Fronteras)
     subgraph SGC_Sistema_de_Gestion
         Ingreso
         Consulta
