@@ -1,0 +1,55 @@
+<% layout('layouts/main') %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-calendar-plus-fill me-2"></i>Agendar Nueva Cita</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/citas/agendar" method="POST">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Médico Especialista</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-md"></i></span>
+                                <select name="medico" class="form-select" required>
+                                    <option value="" selected disabled>Seleccione un médico...</option>
+                                    <% medicos.forEach(medico => { %>
+                                        <option value="<%= medico._id %>">Dr. <%= medico.nombre %> <%= medico.apellido %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha</label>
+                                <input type="date" name="fecha" class="form-control" required 
+                                       min="<%= new Date().toISOString().split('T')[0] %>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Hora</label>
+                                <input type="time" name="hora" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Motivo de la consulta</label>
+                            <textarea name="motivo" class="form-control" rows="3" 
+                                      placeholder="Describa brevemente su necesidad médica..." required></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary fw-bold">
+                                <i class="bi bi-check-circle me-1"></i> Confirmar Cita
+                            </button>
+                            <a href="/dashboard" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

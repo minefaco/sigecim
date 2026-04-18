@@ -1,0 +1,89 @@
+<% layout('layouts/main') %>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="display-5">Bienvenido, <%= nombre %></h2>
+            <p class="lead text-muted">Has ingresado con el rol de: <strong><%= rol %></strong></p>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <% if (rol === 'Admin') { %>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-danger border-4">
+                    <div class="card-body">
+                        <i class="bi bi-person-gear text-danger display-4"></i>
+                        <h4 class="card-title mt-3">Gestión de Usuarios</h4>
+                        <p class="text-muted">Panel central para crear, editar o eliminar personal y pacientes.</p>
+                        <a href="/usuarios" class="btn btn-outline-danger w-100">Administrar Personal</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (rol === 'Recepcionista' || rol === 'Admin') { %>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-primary border-4">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-check text-primary display-4"></i>
+                        <h4 class="card-title mt-3">Agenda de Citas</h4>
+                        <p class="text-muted">Control de turnos, asignación de médicos y recepción de pacientes.</p>
+                        <a href="/citas" class="btn btn-outline-primary w-100">Gestionar Turnos</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (rol === 'Medico' || rol === 'Admin') { %>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-info border-4">
+                    <div class="card-body">
+                        <i class="bi bi-clipboard2-pulse text-info display-4"></i>
+                        <h4 class="card-title mt-3">Consultas Médicas</h4>
+                        <p class="text-muted">Atención de pacientes, historial clínico y generación de recetas.</p>
+                        <a href="/consultas" class="btn btn-outline-info w-100">Ver Consultorio</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <% if (rol === 'Paciente') { %>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-success border-4">
+                    <div class="card-body">
+                        <i class="bi bi-heart-pulse text-success display-4"></i>
+                        <h4 class="card-title mt-3">Mi Salud</h4>
+                        <p class="text-muted">Consulta tu ficha médica, alergias y descarga tus resultados.</p>
+                        <a href="/usuarios/perfil" class="btn btn-outline-success w-100">Ver mi Perfil</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-warning border-4">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-plus text-warning display-4"></i>
+                        <h4 class="card-title mt-3">Solicitar Cita</h4>
+                        <p class="text-muted">Agenda una nueva cita médica con nuestros especialistas.</p>
+                        <a href="/citas/agendar" class="btn btn-outline-warning w-100">Pedir Cita</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm border-start border-primary border-4">
+                    <div class="card-body">
+                        <i class="bi bi-calendar-event text-primary display-4"></i>
+                        <h4 class="card-title mt-3">Mis Citas</h4>
+                        <p class="text-muted">Revisa tus citas programadas, estados y horarios de atención.</p>
+                        <a href="/citas/mis-citas" class="btn btn-outline-primary w-100">Ver Historial</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+    </div>
+</div>

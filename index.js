@@ -7,7 +7,7 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const conectarDB = require('./src/config/db');
 
-// Importamos controladores y middlewares (Pero las rutas las dejamos para después)
+// Importamos controladores y middlewares
 const authController = require('./src/controllers/authController');
 const estaLogueado = require('./src/middlewares/authMiddleware');
 
@@ -21,7 +21,7 @@ app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// 4. MIDDLEWARES GLOBALES (Deben ir antes de las rutas)
+// 4. MIDDLEWARES GLOBALES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); 
@@ -30,28 +30,45 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'secreto_sigecim_2026',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false } // Cambiar a true si usas HTTPS en el futuro
 }));
 
-// 5. RUTAS DE AUTENTICACIÓN (Directas)
+// Middleware para pasar datos de sesión a todas las vistas automáticamente (LOCALES)
+app.use((req, res, next) => {
+    res.locals.nombre = req.session.nombre || null;
+    res.locals.rol = req.session.rol || null;
+    res.locals.usuarioId = req.session.usuarioId || null;
+    next();
+});
+
+// 5. RUTAS DE AUTENTICACIÓN
 app.get('/', authController.mostrarLogin);
 app.post('/login', authController.procesarLogin);
 app.get('/logout', authController.cerrarSesion);
 
+// 6. DASHBOARD UNIVERSAL (Renderiza la vista inteligente con condicionales)
 app.get('/dashboard', estaLogueado, (req, res) => {
-    res.render('index', { 
-        titulo: 'Panel Principal',
-        nombre: req.session.nombre,
-        rol: req.session.rol
+    res.render('dashboard', { 
+        titulo: 'Panel Principal'
+        // No hace falta pasar nombre y rol, res.locals ya los tiene
     });
 });
 
-// 6. RUTAS DE RECURSOS (Aquí importamos y usamos al mismo tiempo para evitar el undefined)
-// Esto asegura que cuando se carguen las rutas, todo lo anterior ya esté inicializado.
+// 7. RUTAS DE RECURSOS (Módulos del Sistema)
 app.use('/usuarios', require('./src/routes/UsuarioRoutes'));
 
-// 7. ENCENDIDO DEL SERVIDOR
+//  RUTA DE LAS CITAS DE USUARIO:
+app.use('/citas', require('./src/routes/CitaRoutes'));
+
+
+// 8. MANEJO DE ERRORES 404 NO PONER MAS COSAS DEBAJO
+app.use((req, res) => {
+    res.status(404).render('404', { titulo: 'Página no encontrada' });
+});
+
+// 9. ENCENDIDO DEL SERVIDOR
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 SIGECIM ejecutándose en http://localhost:${PORT}`);
+    console.log(`SIGECIM ejecutándose en http://localhost:${PORT}`);
 });

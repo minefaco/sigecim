@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs'); // <--- 1. Importa bcrypt
+const bcrypt = require('bcryptjs');
 
 const UsuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
@@ -11,15 +11,20 @@ const UsuarioSchema = new mongoose.Schema({
         type: String, 
         enum: ['Admin', 'Medico', 'Paciente', 'Recepcionista'], 
         default: 'Paciente' 
+    },
+    // --- CAMPOS NUEVOS PARA PACIENTES ---
+    telefono: String,
+    eps: String,
+    tipoSangre: String,
+    alergias: { type: [String], default: [] },
+    contactoEmergencia: {
+        nombre: String,
+        telefono: String
     }
 }, { timestamps: true });
 
-// 2. Middleware para encriptar la contraseña ANTES de guardar
 UsuarioSchema.pre('save', async function(next) {
-    // Si la contraseña no ha sido cambiada, saltamos este paso
     if (!this.isModified('password')) return next();
-    
-    // Generamos el "salt" y encriptamos
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     //next();

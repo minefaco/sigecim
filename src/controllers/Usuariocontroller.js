@@ -18,11 +18,26 @@ exports.formularioCrear = (req, res) => {
 // 3. GUARDAR USUARIO
 exports.guardarUsuario = async (req, res) => {
     try {
+        console.log("Datos recibidos del formulario:", req.body); // Esto nos dirá qué llega al servidor
+        
         const nuevoUsuario = new Usuario(req.body);
         await nuevoUsuario.save();
+        
         res.redirect('/usuarios');
     } catch (error) {
-        res.status(500).send('Error al crear usuario');
+        console.error("Fallo al guardar usuario:", error);
+        
+        // Si el error es por un campo duplicado (como el documento o email)
+        if (error.code === 11000) {
+            return res.status(400).send(`Error: El ${Object.keys(error.keyValue)} ya está registrado.`);
+        }
+        
+        // Si el error es de validación (falta un campo obligatorio)
+        if (error.name === 'ValidationError') {
+            return res.status(400).send(`Error de validación: ${error.message}`);
+        }
+
+        res.status(500).send('Error interno al crear usuario');
     }
 };
 
@@ -57,4 +72,34 @@ exports.eliminarUsuario = async (req, res) => {
     }
 };
 
+// Nueva función para el módulo de paciente
+exports.verPerfilPaciente = async (req, res) => {
+    try {
+        const paciente = await Usuario.findById(req.session.usuarioId);
+        res.render('paciente/perfil', { titulo: 'Mi Perfil Médico', paciente });
+    } catch (error) {
+        res.status(500).send('Error al cargar el perfil');
+    }
+};
+
+// Función para ver el perfil del paciente
+exports.verPerfilPaciente = async (req, res) => {
+    try {
+        const Usuario = require('../models/Usuario');
+        // Buscamos al usuario por su ID de sesión
+        const paciente = await Usuario.findById(req.session.usuarioId);
+        
+        if (!paciente) {
+            return res.status(404).send('Paciente no encontrado');
+        }
+
+        res.render('paciente/perfil', { 
+            titulo: 'Mi Ficha Médica', 
+            paciente 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al cargar el perfil médico');
+    }
+};
 // IMPORTANTE: NO AGREGUES NADA MÁS AQUÍ ABAJO
