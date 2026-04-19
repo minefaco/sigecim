@@ -28,7 +28,13 @@ const CitaSchema = new mongoose.Schema({
         enum: ['Pendiente', 'Confirmada', 'Cancelada', 'Completada'], 
         default: 'Pendiente' 
     },
-    observaciones: String
+    observaciones: String, // Conservamos tu campo original
+    
+    // --- NUEVOS CAMPOS CLÍNICOS (Módulo Médico) ---
+    diagnostico: { type: String },
+    receta: { type: String },
+    notasDoctor: { type: String }
+    
 }, { timestamps: true });
 
 module.exports = mongoose.model('Cita', CitaSchema);

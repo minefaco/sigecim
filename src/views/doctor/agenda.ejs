@@ -1,0 +1,56 @@
+<% layout('layouts/main') %>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-clipboard2-pulse text-info"></i> Mi Consultorio</h2>
+        <span class="text-muted"><%= new Date().toLocaleDateString() %></span>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-header bg-info text-white py-3">
+            <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i> Pacientes en Espera</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Hora</th>
+                            <th>Paciente (Documento)</th>
+                            <th>Motivo de Consulta</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (citas && citas.length > 0) { %>
+                            <% citas.forEach(cita => { %>
+                                <tr>
+                                    <td class="fw-bold fs-5 text-primary"><i class="bi bi-clock"></i> <%= cita.hora %></td>
+                                    <td>
+                                        <strong><%= cita.paciente?.nombre %> <%= cita.paciente?.apellido %></strong><br>
+                                        <small class="text-muted">CC: <%= cita.paciente?.documento %></small>
+                                    </td>
+                                    <td><%= cita.motivo %></td>
+                                    <td><span class="badge bg-success"><i class="bi bi-check-circle"></i> Confirmada</span></td>
+                                    <td class="text-center">
+                                        <a href="/citas/atender/<%= cita._id %>" class="btn btn-primary fw-bold shadow-sm">
+                                            <i class="bi bi-play-fill"></i> Atender Paciente
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-cup-hot display-4 d-block mb-3"></i>
+                                    No tienes pacientes en espera por el momento.
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

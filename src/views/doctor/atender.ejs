@@ -1,0 +1,88 @@
+<% layout('layouts/main') %>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="bi bi-heart-pulse text-danger"></i> Consulta Médica</h2>
+                <a href="/citas/doctor/agenda" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver a la sala de espera</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 border-top border-success border-4 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="bi bi-person-badge"></i> Ficha del Paciente</h5>
+                    <hr>
+                    <h4 class="fw-bold"><%= cita.paciente?.nombre %> <%= cita.paciente?.apellido %></h4>
+                    <p class="mb-1"><strong>Documento:</strong> <%= cita.paciente?.documento %></p>
+                    <p class="mb-1"><strong>EPS:</strong> <%= cita.paciente?.eps || 'No registrada' %></p>
+                    <p class="mb-1"><strong>Tipo de Sangre:</strong> <span class="badge bg-danger"><%= cita.paciente?.tipoSangre || 'N/A' %></span></p>
+                    
+                    <div class="mt-3 p-3 bg-light border border-warning rounded">
+                        <h6 class="text-warning fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Alergias:</h6>
+                        <% if (cita.paciente?.alergias && cita.paciente.alergias.length > 0) { %>
+                            <ul class="mb-0">
+                                <% cita.paciente.alergias.forEach(alergia => { %>
+                                    <li><%= alergia %></li>
+                                <% }) %>
+                            </ul>
+                        <% } else { %>
+                            <p class="mb-0 text-muted">No reporta alergias conocidas.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 border-top border-secondary border-4">
+                <div class="card-body">
+                    <h5 class="card-title text-secondary"><i class="bi bi-chat-left-text"></i> Motivo de Consulta</h5>
+                    <hr>
+                    <p class="fst-italic">"<%= cita.motivo %>"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0"><i class="bi bi-journal-medical"></i> Registro Clínico</h5>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <form action="/citas/atender/<%= cita._id %>" method="POST">
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">Diagnóstico Principal <span class="text-danger">*</span></label>
+                            <textarea name="diagnostico" class="form-control bg-light" rows="3" required placeholder="Ingrese el diagnóstico clínico basado en la valoración..."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">Evolución / Historia Clínica <span class="text-danger">*</span></label>
+                            <textarea name="notasDoctor" class="form-control bg-light" rows="4" required placeholder="Subjetivo, Objetivo, Análisis, Plan (SOAP)..."></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">Receta Médica / Prescripción</label>
+                            <textarea name="receta" class="form-control bg-light border-info" rows="3" placeholder="Medicamento, dosis, frecuencia y duración del tratamiento..."></textarea>
+                            <div class="form-text text-muted"><i class="bi bi-info-circle"></i> Deje este campo en blanco si no requiere medicación.</div>
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <p class="text-muted me-4 mb-0 small"><i class="bi bi-shield-lock"></i> Al guardar, la cita se marcará como <strong>Completada</strong>.</p>
+                            <button type="submit" class="btn btn-success btn-lg fw-bold px-5 shadow">
+                                <i class="bi bi-check2-all me-2"></i> Finalizar Consulta
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

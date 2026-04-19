@@ -1,0 +1,93 @@
+<% layout('layouts/main') %>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-calendar2-week text-primary"></i> Control de Agenda Global</h2>
+        
+        <div>
+            <a href="/citas/nueva" class="btn btn-success me-2">
+                <i class="bi bi-plus-circle"></i> Nuevo Turno
+            </a>
+            <button class="btn btn-primary">
+                <i class="bi bi-printer"></i> Imprimir Agenda del Día
+            </button>
+        </div>
+        </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Paciente (Documento)</th>
+                            <th>Médico Asignado</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (citas.length > 0) { %>
+                            <% citas.forEach(cita => { %>
+                                <tr>
+                                    <td class="fw-bold text-primary"><%= new Date(cita.fecha).toLocaleDateString() %></td>
+                                    <td><i class="bi bi-clock"></i> <%= cita.hora %></td>
+                                    
+                                    <td>
+                                        <strong><%= cita.paciente?.nombre || 'Usuario' %> <%= cita.paciente?.apellido || 'Eliminado' %></strong><br>
+                                        <small class="text-muted">CC: <%= cita.paciente?.documento || 'N/A' %></small>
+                                    </td>
+                                    <td>Dr. <%= cita.medico?.nombre || 'Médico' %> <%= cita.medico?.apellido || 'No Asignado' %></td>
+                                    <td>
+                                        <% if(cita.estado === 'Pendiente') { %>
+                                            <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pendiente</span>
+                                        <% } else if(cita.estado === 'Confirmada') { %>
+                                            <span class="badge bg-success"><i class="bi bi-check-circle"></i> Confirmada</span>
+                                        <% } else if(cita.estado === 'Cancelada') { %>
+                                            <span class="badge bg-danger"><i class="bi bi-x-circle"></i> Cancelada</span>
+                                        <% } else { %>
+                                            <span class="badge bg-secondary"><i class="bi bi-check-all"></i> Completada</span>
+                                        <% } %>
+                                    </td>
+                                    
+                                    <td class="text-center">
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            
+                                            <form action="/citas/<%= cita._id %>/estado?_method=PUT" method="POST" class="d-inline">
+                                                <input type="hidden" name="nuevoEstado" value="Confirmada">
+                                                <button type="submit" class="btn btn-sm btn-outline-success" title="Confirmar Cita" <%= cita.estado === 'Confirmada' ? 'disabled' : '' %>>
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            </form>
+
+                                            <a href="/citas/<%= cita._id %>" class="btn btn-sm btn-outline-info" title="Ver Detalles">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+
+                                            <form action="/citas/<%= cita._id %>/estado?_method=PUT" method="POST" class="d-inline">
+                                                <input type="hidden" name="nuevoEstado" value="Cancelada">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Cancelar Cita" <%= cita.estado === 'Cancelada' ? 'disabled' : '' %>>
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                                    No hay citas registradas en el sistema.
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
